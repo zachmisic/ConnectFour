@@ -7,6 +7,17 @@ var moves = 0;
 //Current color
 var color = "";
 
+//Builds board matrix
+var board = [];
+for (var i = 0; i < 7; i++) {
+    board[i] = [];
+    for (var j = 0; j < 6; j++) {
+        board[i][j] = "-";
+    }
+}
+//How many pieces are in each column
+var columnCounts = [0, 0, 0, 0, 0, 0, 0];
+
 var canvas = document.getElementById("myCanvas");
 var cont = canvas.getContext("2d");
 
@@ -52,15 +63,20 @@ canvas.addEventListener('click', function (event) {
     //Gets X value based on which column is clicked
     let x = event.pageX - (canvas.offsetLeft + canvas.clientLeft);
     x = Math.floor(x / 150);
-    x = (x * 150) + 75;
+    let x_pos = (x * 150) + 75;
 
+    //Gets Y based on how many other pieces are in that column
+    let y = columnCounts[x];
+    //Only adds piece if there is room in the column
+    if (columnCounts[x] < 6) {
+        columnCounts[x]++;
+        let y_pos = 825 - (y * 150);
 
-
-
-    setColor();
-    drawCircle(x, 75);
-    moves++;
-
+        setColor();
+        board[x][y] = color;
+        drawCircle(x_pos, y_pos);
+        moves++;
+    }
 }, false);
 
 
