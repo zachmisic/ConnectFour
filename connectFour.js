@@ -8,9 +8,9 @@ var moves = 0;
 var color = "";
 
 //Builds board matrix
-var board = [];
+var board = new Array(7);
 for (var i = 0; i < 7; i++) {
-    board[i] = [];
+    board[i] = new Array(6);
     for (var j = 0; j < 6; j++) {
         board[i][j] = "-";
     }
@@ -58,6 +58,70 @@ function drawCircle(x, y) {
     cont.stroke();
 }
 
+function checkRow(y) {
+    let cnt = 0;
+    let prevCol = "";
+    let result = false;
+    for (var x = 0; x < 7; x++) {
+        if ((cnt == 0) && ((board[x][y] == "R") || (board[x][y] == "Y"))) {
+            cnt++;
+            prevCol = board[x][y];
+        } else if (prevCol == board[x][y]) {
+            cnt++
+            if (cnt == 4) {
+                result = true;
+            }
+        } else {
+            cnt = 0;
+        }
+    }
+
+    return (result);
+}
+
+function checkCol(x) {
+    let cnt = 0;
+    let prevCol = "";
+    let result = false;
+    for (var y = 0; y < 6; y++) {
+        if ((cnt == 0) && ((board[x][y] == "R") || (board[x][y] == "Y"))) {
+            cnt++;
+            prevCol = board[x][y];
+        } else if (prevCol == board[x][y]) {
+            cnt++
+            if (cnt == 4) {
+                result = true;
+            }
+        } else {
+            cnt = 0;
+        }
+    }
+    
+    return (result);
+}
+
+function checkLeftDiag(x, y) {
+
+}
+
+function checkRightDiag(x, y) {
+
+}
+
+function checkWin(x, y) {
+    let winStatus = false;
+    if (checkRow(y) == true) {winStatus = true;}
+    if (checkCol(x) == true) { winStatus = true; }
+    //if (checkLeftDiag(x, y) == true) { winStatus = true; }
+    //if (checkRightDiag(x, y) == true) { winStatus = true; }
+
+    if (winStatus == true) {
+        moves--;
+        setColor();
+        alert("Winner: "+color);
+    }
+}
+
 //Click event
 canvas.addEventListener('click', function (event) {
     //Gets X value based on which column is clicked
@@ -76,6 +140,7 @@ canvas.addEventListener('click', function (event) {
         board[x][y] = color;
         drawCircle(x_pos, y_pos);
         moves++;
+        checkWin(x, y);
     }
 }, false);
 
