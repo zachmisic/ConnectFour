@@ -101,19 +101,73 @@ function checkCol(x) {
 }
 
 function checkLeftDiag(x, y) {
+    let cnt = 0;
+    let prevCol = "";
+    let result = false;
 
+    //move to top left of current diagonal
+    while ((x>0) && (y>0)) {
+        x--;
+        y--;
+    }
+
+    //move to bottom right of diagonal counting consecutives
+    while ((x < 6) && (y < 5)) {
+        if ((cnt == 0) && ((board[x][y] == "R") || (board[x][y] == "Y"))) {
+            cnt++;
+            prevCol = board[x][y];
+        } else if (prevCol == board[x][y]) {
+            cnt++
+            if (cnt == 4) {
+                result = true;
+            }
+        } else {
+            cnt = 0;
+        }
+        x++;
+        y++;
+    }
+
+    return result;
 }
 
 function checkRightDiag(x, y) {
+    let cnt = 0;
+    let prevCol = "";
+    let result = false;
 
+    //move to top right of current diagonal
+    while ((x < 6) && (y > 0)) {
+        x++;
+        y--;
+    }
+
+    //move to bottom left of diagonal counting consecutives
+    while ((x > 0) && (y < 5)) {
+        if ((cnt == 0) && ((board[x][y] == "R") || (board[x][y] == "Y"))) {
+            cnt++;
+            prevCol = board[x][y];
+        } else if (prevCol == board[x][y]) {
+            cnt++
+            if (cnt == 4) {
+                result = true;
+            }
+        } else {
+            cnt = 0;
+        }
+        x--;
+        y++;
+    }
+
+    return result;
 }
 
 function checkWin(x, y) {
     let winStatus = false;
     if (checkRow(y) == true) {winStatus = true;}
     if (checkCol(x) == true) { winStatus = true; }
-    //if (checkLeftDiag(x, y) == true) { winStatus = true; }
-    //if (checkRightDiag(x, y) == true) { winStatus = true; }
+    if (checkLeftDiag(x, y) == true) { winStatus = true; }
+    if (checkRightDiag(x, y) == true) { winStatus = true; }
 
     if (winStatus == true) {
         moves--;
